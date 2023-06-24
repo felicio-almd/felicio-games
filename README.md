@@ -3,7 +3,7 @@
 
 &#xa0;
 
-<h2 href="https://felicio-games.vercel.app/">Site</h2>
+<a href="https://felicio-games.vercel.app/">Site</a>
 
 </div>
 
@@ -53,8 +53,8 @@ The following tools were used in this project:
 - [React](https://pt-br.reactjs.org/)
 
 Prints do site :
-![Alt text](image.png)
-![Alt text](image-1.png)
+![Alt text](image-2.png)
+![Alt text](image-3.png)
 
 ## :white_check_mark: Requirements
 
