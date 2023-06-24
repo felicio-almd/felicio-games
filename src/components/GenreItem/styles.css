@@ -1,0 +1,15 @@
+.games__genre input[type="radio"] {
+  display: none;
+}
+
+.games__genre label {
+  display: inline-block;
+  padding: 0.625rem 1.25rem;
+  background: none;
+  cursor: pointer;
+}
+
+.games__genre input[type="radio"]:hover + label,
+.games__genre input[type="radio"]:checked + label {
+  font-weight: bold;
+}
