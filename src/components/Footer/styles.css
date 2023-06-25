@@ -1,0 +1,20 @@
+.footer {
+  text-align: center;
+  padding: 2.5rem 0;
+}
+
+.copyright {
+  color: #ffffff;
+  font-size: 0.8125rem;
+  margin: 1.25rem 0;
+}
+
+.footer__links {
+  padding: 1rem;
+}
+
+.footer__social {
+  padding: 1rem;
+  gap: 1rem;
+  color: gray;
+}
