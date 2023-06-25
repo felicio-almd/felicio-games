@@ -3,6 +3,8 @@ import logo from "../../../public/logo-games-felicio.svg";
 import home from "../../assets/home-button.svg";
 import GenreItem from "../GenreItem";
 
+// Componente de header que tem várias funcionalidades a serem utilizadas pelo usuário na página, o componente search é a children desse.
+
 function Header({ genres, onChange, selectedGenre, children }) {
   function scrollTop() {
     window.scrollTo({

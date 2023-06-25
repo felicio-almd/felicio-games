@@ -1,5 +1,7 @@
 import "./styles.css";
 
+// Componente do card com a props para montar cada card que será mostrado. É passada para utilização na página principal fora do header
+
 function Card({ game }) {
   return (
     <a href={game.game_url} target="_blank" className="games__card">

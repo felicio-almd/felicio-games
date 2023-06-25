@@ -1,5 +1,7 @@
 import "./styles.css";
 
+// Componente com a função que muda o genero que será mostrado na pagina de acordo a escolha do usuario.
+
 function GenreItem({ genre, onChange, selectedGenre, index }) {
   return (
     <>

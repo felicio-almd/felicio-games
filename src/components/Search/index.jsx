@@ -1,5 +1,7 @@
 import "./styles.css";
 
+// Componente de busca de jogos que muda ao digitar. Tem o header como component parent
+
 function Search({ onChange }) {
   return (
     <input

@@ -5,6 +5,7 @@ import Card from "./components/Card";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import Search from "./components/Search";
+import Footer from "./components/Footer";
 const LIMIT_GAMES = 12;
 
 function App() {
@@ -17,10 +18,18 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [limitGames, setLimitGames] = useState(LIMIT_GAMES);
 
+  // utilizado o hook de usestate para que os componentes possam ter estado, a interface é atualizada de forma adequada, posso atribuir valor a cada variavel e gerenciar facilmente esses estados com base em interações.
+
   function getGenres() {
+    // nessa função é setado os generos dos jogos para que seja feito a label com os generos dentro da pagina
     const uniqueGenres = [...new Set(games.map((game) => game.genre))];
     setGenres(["Todos", ...uniqueGenres]);
   }
+
+  // Nessa função, o programa busca na API os dados necessários para que depois os jogos sejam mostrados
+  //  Para que ela funcione melhor, tem programação assincrona, quando se fala em promises, temos a promessa que esses dados chegarão e a função trabalha em cima disso, caso não chegarem, mostra um erro.
+
+  // o async/await trás uma sintaxe melhor, trabalha com uma promise por vez e tem boa performance
 
   async function getGames() {
     try {
@@ -60,6 +69,7 @@ function App() {
     }
   }
 
+  // Essa constante é feita para que quando esteja selecionado um genero especifico e a busca seja utilizada, só aparece jogos que estão no genero selecionado.
   const filterGames = (genre, search) => {
     let filtered;
     if (genre === "Todos" && search === "") {
@@ -76,6 +86,7 @@ function App() {
     setFilteredGames(filtered);
   };
 
+  // Função para atualizar de qual genero irá aparecer jogos na página
   const handleGenreChange = (event) => {
     const genre = event.target.value;
     setSelectedGenre(genre);
@@ -91,6 +102,8 @@ function App() {
     filterGames(selectedGenre, searchTerm);
   };
 
+  // Com os useEffects é passado para o react que meu componente precisa se executar e não renderizar e podendo lidar com manipulação de API ou coisas que não são ligadas diretamente a componentização
+  // Eles só são passados após as funções serem renderizadas
   useEffect(() => {
     getGames();
   }, []);
@@ -103,6 +116,7 @@ function App() {
     getGenres();
   }, [games]);
 
+  // esse efeito é hook de scroll infinito, onde a página mostra 12 jogos por vezes e carrega de acordo o scroll
   useEffect(() => {
     function bottomPageVerify() {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -115,6 +129,7 @@ function App() {
     };
   });
 
+  // retorno que aparece ná pagina, nela foi utilizado a componentização separando o header, a página de loader e a parte que aparecerá os jogos.
   return (
     <>
       <div className="body">
@@ -127,6 +142,7 @@ function App() {
             <Search onChange={handleSearchChange} />
           </Header>
         )}
+
         <div className="games__container">
           {games.length < 1 ? (
             <div>
@@ -148,6 +164,7 @@ function App() {
             </div>
           )}
         </div>
+        {games.length < 1 ? null : <Footer />}
       </div>
     </>
   );

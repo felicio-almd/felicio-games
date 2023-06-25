@@ -1,5 +1,7 @@
 @import "./index.css";
 
+/* Estilização principal do projeto, incluindo responsividade para mais aparelhos*/
+
 body {
   background: var(--main-bg);
   color: var(--font);
@@ -29,7 +31,6 @@ body {
 }
 
 .error-message {
-  /* width: auto; */
   padding-top: 4rem;
   font-weight: bold;
   font-size: 25px;

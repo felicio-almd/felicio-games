@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap");
 
+/* Estilização inicial onde é passado a base de dados a ser utilizada na página e resetado alguns pontos para trabalho de estilos*/
+
 * {
   font-family: Inter, Arial, Helvetica, sans-serif;
   margin: 0;
@@ -23,5 +25,3 @@
   --font: #fcfcfc;
   --font-desc: rgba(161, 160, 163, 1);
 }
-/* rgba(218, 50, 50, 0.2) 0%,
-    rgba(157, 49, 49, 0) 33.96% */
