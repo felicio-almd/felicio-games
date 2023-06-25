@@ -10,7 +10,7 @@
 
 :root {
   --main-bg: linear-gradient(180deg, #4b2b2b 0%, #000000 63.96%);
-  --card-bg: linear-gradient(180deg, #7c3434 0%, #252424 50%);
+  --card-bg: linear-gradient(180deg, #664040 0%, #252424 65%);
   --search-box: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1) 0%,
