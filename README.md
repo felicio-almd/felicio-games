@@ -41,6 +41,7 @@ Site de uma Lista de jogos, fornecida por um API, realizado com HTML, CSS e Reac
 :heavy_check_mark: Feature 4: Apresenta mensagem visiveis ao usuario quando ocorre erro;\
 :heavy_check_mark: Feature 5: Campo para pesquisa de jogos por titulo;\
 :heavy_check_mark: Feature 6: Labels com os generos de jogos disponiveis;
+:heavy_check_mark: Feature 7: Deploy na vercel! 😃 ;
 
 ## :rocket: Technologies
 
