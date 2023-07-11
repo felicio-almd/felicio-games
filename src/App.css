@@ -1,46 +1,7 @@
 @import "./index.css";
 
-/* Estilização principal do projeto, incluindo responsividade para mais aparelhos*/
-
 body {
   background: var(--main-bg);
   color: var(--font);
   position: relative;
-}
-
-.games__container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  margin-top: 200px;
-  min-height: calc(100vh - 150px);
-}
-
-.games__main {
-  padding: 1rem;
-  align-items: center;
-  align-content: center;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 350px);
-  width: 100%;
-  max-width: 1200px;
-  justify-content: center;
-  gap: 1rem;
-  height: 100%;
-}
-
-.error-message {
-  padding-top: 4rem;
-  font-weight: bold;
-  font-size: 25px;
-}
-
-@media screen and (min-width: 1024px) {
-  .games__main {
-    grid-template-columns: repeat(auto-fit, 350px);
-  }
-  .games__container {
-    margin-top: 150px;
-  }
 }

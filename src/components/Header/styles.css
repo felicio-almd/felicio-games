@@ -17,9 +17,11 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  min-width: 50%;
+  min-width: auto;
   height: 3.2rem;
   gap: 0.5rem;
+  background: none;
+  cursor: pointer;
 }
 
 .header__logo__image {
@@ -28,27 +30,21 @@
 }
 
 .header__logo__title {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 1rem 0;
   font-size: 1.4rem;
   height: 100%;
+  color: var(--font);
 }
 
-.header__home__button {
-  order: 2;
-  background: none;
-  border: none;
+.header__actions {
+  order: 3;
+  display: flex;
   width: auto;
-  height: 100%;
-  padding: 1rem;
-  cursor: pointer;
-  transition: transform 200ms ease-out;
-}
-
-.header__home__button:hover {
-  transform: scale(1.3);
+  justify-content: center;
+  gap: 1rem;
 }
 
 .games__genre {
@@ -66,7 +62,37 @@
   background-color: transparent;
 }
 
+.header__login__button {
+  background: none;
+  color: var(--font);
+  cursor: pointer;
+  transition: transform 200ms ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1.5rem;
+}
+
+.header__login__button:hover {
+  transform: scale(1.3);
+}
+
+@media screen and (min-width: 768px) {
+  .header__actions {
+    width: auto;
+  }
+  .header__logo__title {
+    display: flex;
+  }
+}
+
 @media screen and (min-width: 1024px) {
+  .header__logo__title {
+    display: flex;
+    font-size: 1.6rem;
+  }
+
   .games__genre {
     justify-content: flex-start;
   }
@@ -76,14 +102,10 @@
   }
 
   .header__logo {
-    width: 70%;
+    width: 65%;
   }
 
-  .header__logo__title {
-    font-size: 2rem;
-  }
-
-  .header__home__button {
-    order: 3;
+  .header__actions {
+    width: auto;
   }
 }
