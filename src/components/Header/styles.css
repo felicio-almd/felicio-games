@@ -5,7 +5,7 @@
   padding: 1rem;
   flex-wrap: wrap;
   gap: 0.5rem;
-  position: fixed;
+  /* position: fixed; */
   background: #4b2b2b;
   min-height: 3.2rem;
   top: 0;
@@ -21,7 +21,7 @@
   height: 3.2rem;
   gap: 0.5rem;
   background: none;
-  cursor: pointer;
+  user-select: none;
 }
 
 .header__logo__image {
@@ -71,11 +71,21 @@
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
 }
-
 .header__login__button:hover {
-  transform: scale(1.3);
+  transform: scale(1.1);
+}
+.header__logout__button {
+  background: none;
+  color: var(--font);
+  cursor: pointer;
+  transition: transform 200ms ease-out;
+  font-size: 1rem;
+  padding: 0 1rem;
+}
+.header__logout__button:hover {
+  transform: scale(1.1);
 }
 
 @media screen and (min-width: 768px) {
@@ -102,7 +112,7 @@
   }
 
   .header__logo {
-    width: 65%;
+    width: auto;
   }
 
   .header__actions {

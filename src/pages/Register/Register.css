@@ -1,5 +1,6 @@
 .auth__register {
   width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,4 +11,13 @@
 
 .auth__button {
   cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.auth__error__password__message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  margin-bottom: 1rem;
 }

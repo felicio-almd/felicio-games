@@ -20,6 +20,7 @@
     rgba(255, 194, 194, 0.1) 100%
   );
   --border: rgba(255, 255, 255, 0.7);
+  --button: rgba(0, 0, 0, 0.2);
 
   --border-search: rgba(255, 255, 255, 0.5);
   --font: #fcfcfc;

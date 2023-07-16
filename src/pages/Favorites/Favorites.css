@@ -1,7 +1,8 @@
-/* .favorites {
+.favorites {
+  height: 100vh;
   order: 4;
   display: flex;
 }
 .favorites__h2 {
   order: 5;
-} */
+}

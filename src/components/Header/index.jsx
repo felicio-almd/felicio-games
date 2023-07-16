@@ -7,20 +7,14 @@ import { UserAuth } from "../../context/AuthContext";
 function Header({ genres, onChange, selectedGenre, children }) {
   const { user, logOut } = UserAuth();
 
-  const returnUser = () => {
-    return user ? user.email : "usuario deslogado";
+  const userIsLogged = () => {
+    return !!user;
   };
-
-  function scrollTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
 
   const handleLogout = async () => {
     try {
       await logOut();
+      window.location.reload();
     } catch (error) {
       console.log(error.message);
     }
@@ -28,21 +22,29 @@ function Header({ genres, onChange, selectedGenre, children }) {
 
   return (
     <header className="header">
-      <button className="header__logo" onClick={scrollTop}>
+      <div className="header__logo">
         <img
           className="header__logo__image"
           src={logo}
           alt="logo-gamesfelicio"
         />
         <h1 className="header__logo__title">Games Felicio </h1>
-      </button>
+      </div>
       <div className="header__actions">
-        <Link className="header__login__button" to="/login">
-          <i className="fa-regular fa-circle-user"></i>
-          <p>{returnUser()}</p>
-        </Link>
+        {userIsLogged() ? (
+          <p>{user.email}</p>
+        ) : (
+          <Link className="header__login__button" to="/login">
+            <i className="fa-regular fa-circle-user"></i>
+            <p>Fazer Login</p>
+          </Link>
+        )}
 
-        <button onClick={handleLogout}>LogOut</button>
+        {userIsLogged() ? (
+          <button onClick={handleLogout} className="header__logout__button">
+            Sair
+          </button>
+        ) : null}
       </div>
 
       {children}

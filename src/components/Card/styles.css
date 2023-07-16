@@ -19,6 +19,15 @@
   width: 100%;
 }
 
+.games__card__button {
+  position: absolute;
+  padding: 2rem;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+}
+
 .games__card__infos {
   display: flex;
   height: 100%;
@@ -51,4 +60,42 @@
   color: var(--font-desc);
   padding: 0 1rem;
   font-size: 12px;
+}
+
+.games__card__rating {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  text-decoration: none;
+}
+
+.star-rating {
+  display: flex;
+  gap: 10px;
+  color: white;
+  font-size: 12px;
+  align-items: center;
+}
+
+.star-rating__button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.on {
+  color: yellow;
+}
+.off {
+  color: #ccc;
+}
+
+.rate__remove {
+  font-size: 12px;
+  padding: 0 5px;
+  width: auto;
+  height: 90%;
+  background: none;
+  color: white;
+  cursor: pointer;
 }

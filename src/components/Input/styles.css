@@ -18,3 +18,10 @@
   font-size: 1rem;
   outline: none;
 }
+
+.password__show {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}

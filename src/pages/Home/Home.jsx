@@ -1,12 +1,12 @@
-import { Component, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Home.css";
 import axios from "axios";
 import Card from "../../components/Card";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import Search from "../../components/Search";
-import Footer from "../../components/Footer";
-import Favorites from "../../components/Favorites";
+import { FirestoreActions } from "../../context/FirestoreContext";
+
 const LIMIT_GAMES = 12;
 
 function Home() {
@@ -18,8 +18,9 @@ function Home() {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [limitGames, setLimitGames] = useState(LIMIT_GAMES);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
-  // utilizado o hook de usestate para que os componentes possam ter estado, a interface é atualizada de forma adequada, posso atribuir valor a cada variavel e gerenciar facilmente esses estados com base em interações.
+  const { favorites } = FirestoreActions();
 
   function getGenres() {
     // nessa função é setado os generos dos jogos para que seja feito a label com os generos dentro da pagina
@@ -29,8 +30,6 @@ function Home() {
 
   // Nessa função, o programa busca na API os dados necessários para que depois os jogos sejam mostrados
   //  Para que ela funcione melhor, tem programação assincrona, quando se fala em promises, temos a promessa que esses dados chegarão e a função trabalha em cima disso, caso não chegarem, mostra um erro.
-
-  // o async/await trás uma sintaxe melhor, trabalha com uma promise por vez e tem boa performance
 
   async function getGames() {
     try {
@@ -103,8 +102,17 @@ function Home() {
     filterGames(selectedGenre, searchTerm);
   };
 
-  // Com os useEffects é passado para o react que meu componente precisa se executar e não renderizar e podendo lidar com manipulação de API ou coisas que não são ligadas diretamente a componentização
-  // Eles só são passados após as funções serem renderizadas
+  function scrollTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function handleScroll() {
+    setShowScrollButton(window.scrollY > 0);
+  }
+
   useEffect(() => {
     getGames();
   }, []);
@@ -117,19 +125,23 @@ function Home() {
     getGenres();
   }, [games]);
 
-  // esse efeito é hook de scroll infinito, onde a página mostra 12 jogos por vezes e carrega de acordo o scroll
   useEffect(() => {
     function bottomPageVerify() {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         setLimitGames((limitGames) => limitGames + 12);
       }
     }
-    window.addEventListener("scroll", bottomPageVerify);
-    return () => {
-      window.removeEventListener("scroll", bottomPageVerify);
-    };
-  });
 
+    function scrollHandler() {
+      handleScroll();
+      bottomPageVerify();
+    }
+
+    window.addEventListener("scroll", scrollHandler);
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, []);
   // retorno que aparece ná pagina, nela foi utilizado a componentização separando o header, a página de loader e a parte que aparecerá os jogos.
   return (
     <>
@@ -141,13 +153,12 @@ function Home() {
             selectedGenre={selectedGenre}
           >
             <Search onChange={handleSearchChange} />
-            {/* <Favorites /> */}
           </Header>
         )}
 
         <div className="games__container">
           {games.length < 1 ? (
-            <div>
+            <div className="games__container__message">
               {isError ? (
                 <p className="error-message"> {errorMessage} </p>
               ) : (
@@ -166,7 +177,15 @@ function Home() {
             </div>
           )}
         </div>
-        {games.length < 1 ? null : <Footer />}
+        {games.length < 1 ? null : (
+          <>
+            {showScrollButton && (
+              <button className="scroll__top__button" onClick={scrollTop}>
+                <i className="fa-solid fa-arrow-up"></i>
+              </button>
+            )}
+          </>
+        )}
       </div>
     </>
   );

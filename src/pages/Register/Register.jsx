@@ -8,6 +8,7 @@ import { UserAuth } from "../../context/AuthContext";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const { createUser } = UserAuth();
 
@@ -30,7 +31,11 @@ const Register = () => {
 
   return (
     <div className="auth__page">
-      <img className="header__logo__image" src={logo} alt="logo-gamesfelicio" />
+      <img
+        className="header__logo__image__login"
+        src={logo}
+        alt="logo-gamesfelicio"
+      />
 
       <div className="auth">
         <div className="back">
@@ -57,14 +62,30 @@ const Register = () => {
             >
               <i className="fa-solid fa-key"></i>
             </Input>
-          </div>
 
-          <button className="auth__button" type="Submit">
+            <Input
+              placeholder="Confirmar senha"
+              type="password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            >
+              <i className="fa-solid fa-lock"></i>
+            </Input>
+          </div>
+          <>
+            {password !== confirmPassword ? (
+              <small className="auth__error__password__message">
+                As senhas não coincidem
+              </small>
+            ) : null}
+          </>
+
+          <button
+            disabled={password !== confirmPassword}
+            className="auth__button"
+            type="Submit"
+          >
             Registrar-se
           </button>
-          {/* {error && (
-            <span className="auth__wrong">Email ou senha incorretos!</span>
-          )} */}
         </form>
       </div>
     </div>
