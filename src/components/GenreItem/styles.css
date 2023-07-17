@@ -13,3 +13,7 @@
 .games__genre input[type="radio"]:checked + label {
   font-weight: bold;
 }
+
+.favoritos input [type="radio"]:checked + label {
+  font-weight: bold;
+}

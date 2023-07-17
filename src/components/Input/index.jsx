@@ -1,6 +1,6 @@
 import React from "react";
-import "./styles.css";
 import { useState } from "react";
+import "./styles.css";
 
 const Input = ({ children, onChange, type, placeholder, value }) => {
   const [isShowing, setIsShowing] = useState(false);

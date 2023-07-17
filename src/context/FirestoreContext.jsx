@@ -1,14 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { db } from "../firebase";
 import {
   collection,
-  addDoc,
   setDoc,
   deleteDoc,
   getDocs,
   doc,
 } from "firebase/firestore";
-import { db } from "../firebase";
 
 const ratingsCollection = collection(db, "ratings");
 const favoritesCollection = collection(db, "favorites");

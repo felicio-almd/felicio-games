@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import "./Home.css";
+import { FirestoreActions } from "../../context/FirestoreContext";
 import axios from "axios";
 import Card from "../../components/Card";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import Search from "../../components/Search";
-import { FirestoreActions } from "../../context/FirestoreContext";
+
+import "./Home.css";
 
 const LIMIT_GAMES = 12;
 
@@ -19,17 +20,15 @@ function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const [limitGames, setLimitGames] = useState(LIMIT_GAMES);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [showingFavorite, setShowingFavorites] = useState(false);
+  const [showingRated, setShowingRated] = useState(false);
 
-  const { favorites } = FirestoreActions();
+  const { favorites, ratings } = FirestoreActions();
 
   function getGenres() {
-    // nessa função é setado os generos dos jogos para que seja feito a label com os generos dentro da pagina
     const uniqueGenres = [...new Set(games.map((game) => game.genre))];
     setGenres(["Todos", ...uniqueGenres]);
   }
-
-  // Nessa função, o programa busca na API os dados necessários para que depois os jogos sejam mostrados
-  //  Para que ela funcione melhor, tem programação assincrona, quando se fala em promises, temos a promessa que esses dados chegarão e a função trabalha em cima disso, caso não chegarem, mostra um erro.
 
   async function getGames() {
     try {
@@ -70,9 +69,13 @@ function Home() {
   }
 
   // Essa constante é feita para que quando esteja selecionado um genero especifico e a busca seja utilizada, só aparece jogos que estão no genero selecionado.
-  const filterGames = (genre, search) => {
+  const filterGames = (genre, search, favorites, userIsLogged) => {
     let filtered;
-    if (genre === "Todos" && search === "") {
+    if (
+      genre === "Todos" &&
+      search === "" &&
+      (!userIsLogged || favorites.length === 0)
+    ) {
       filtered = games;
     } else {
       filtered = games.filter((game) => {
@@ -80,21 +83,38 @@ function Home() {
         const matchesSearchTerm =
           search === "" ||
           game.title.toLowerCase().includes(search.toLowerCase());
-        return matchesGenre && matchesSearchTerm;
+        const isFavorited = userIsLogged && favorites.includes(game.id);
+        return (
+          matchesGenre && matchesSearchTerm && (!userIsLogged || isFavorited)
+        );
       });
     }
     setFilteredGames(filtered);
   };
 
+  const filterGamesById = (ids, games) => {
+    const filteredGames = games.filter((game) => {
+      return ids.includes(game.id);
+    });
+
+    return filteredGames;
+  };
+
+  const favoritedGames = filterGamesById(favorites, games);
+
+  const handleFavorite = (event) => {
+    setShowingFavorites(event.target.checked);
+  };
+
   // Função para atualizar de qual genero irá aparecer jogos na página
   const handleGenreChange = (event) => {
     const genre = event.target.value;
+    setShowingFavorites(false);
     setSelectedGenre(genre);
     setLimitGames(LIMIT_GAMES);
     filterGames(genre, search);
   };
 
-  // Função para atualizar o estado do termo de pesquisa
   const handleSearchChange = (event) => {
     const searchTerm = event.target.value;
     setSearch(searchTerm);
@@ -142,7 +162,7 @@ function Home() {
       window.removeEventListener("scroll", scrollHandler);
     };
   }, []);
-  // retorno que aparece ná pagina, nela foi utilizado a componentização separando o header, a página de loader e a parte que aparecerá os jogos.
+
   return (
     <>
       <div className="body">
@@ -152,31 +172,48 @@ function Home() {
             onChange={handleGenreChange}
             selectedGenre={selectedGenre}
           >
-            <Search onChange={handleSearchChange} />
+            <Search
+              onChange={handleSearchChange}
+              onFavoriteChange={handleFavorite}
+              // onRatedChange={handleRated}
+              favChecked={showingFavorite}
+              // rateChecked={showingRated}
+            />
           </Header>
         )}
 
-        <div className="games__container">
-          {games.length < 1 ? (
-            <div className="games__container__message">
-              {isError ? (
-                <p className="error-message"> {errorMessage} </p>
-              ) : (
-                <Loader />
-              )}
-            </div>
-          ) : (
+        {showingFavorite ? (
+          <div className="games__container">
             <div className="games__main">
-              {filteredGames.length < 1 ? (
-                <div className="error-message">Nenhum Jogo Encontrado</div>
-              ) : (
-                filteredGames
-                  .slice(0, limitGames)
-                  .map((game) => <Card key={game.id} game={game} />)
-              )}
+              {favoritedGames.map((game) => (
+                <Card key={game.id} game={game} />
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="games__container">
+            {games.length < 1 ? (
+              <div className="games__container__message">
+                {isError ? (
+                  <p className="error-message"> {errorMessage} </p>
+                ) : (
+                  <Loader />
+                )}
+              </div>
+            ) : (
+              <div className="games__main">
+                {filteredGames.length < 1 ? (
+                  <div className="error-message">Nenhum Jogo Encontrado</div>
+                ) : (
+                  filteredGames
+                    .slice(0, limitGames)
+                    .map((game) => <Card key={game.id} game={game} />)
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {games.length < 1 ? null : (
           <>
             {showScrollButton && (

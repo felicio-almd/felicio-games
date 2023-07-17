@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
+import { UserAuth } from "../../context/AuthContext";
+
 import Input from "../../components/Input";
 import logo from "../../../public/logo-games-felicio.svg";
-import { UserAuth } from "../../context/AuthContext";
+
+import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -28,6 +30,7 @@ const Login = () => {
       localStorage.setItem("user-email", email);
       localStorage.setItem("user-password", password);
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.log(error.message);
       if (error.message.includes("auth/user-not-found")) {

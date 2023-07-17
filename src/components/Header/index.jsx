@@ -1,8 +1,9 @@
-import "./styles.css";
-import logo from "../../../public/logo-games-felicio.svg";
-import GenreItem from "../GenreItem";
 import { Link } from "react-router-dom";
 import { UserAuth } from "../../context/AuthContext";
+import logo from "../../../public/logo-games-felicio.svg";
+import GenreItem from "../GenreItem";
+
+import "./styles.css";
 
 function Header({ genres, onChange, selectedGenre, children }) {
   const { user, logOut } = UserAuth();
@@ -32,7 +33,7 @@ function Header({ genres, onChange, selectedGenre, children }) {
       </div>
       <div className="header__actions">
         {userIsLogged() ? (
-          <p>{user.email}</p>
+          <p className="header__actions__name">{user.email}</p>
         ) : (
           <Link className="header__login__button" to="/login">
             <i className="fa-regular fa-circle-user"></i>

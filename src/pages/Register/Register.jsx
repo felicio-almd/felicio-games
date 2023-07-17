@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../components/Input";
-import logo from "../../../public/logo-games-felicio.svg";
-import "./Register.css";
 import { UserAuth } from "../../context/AuthContext";
+
+import logo from "../../../public/logo-games-felicio.svg";
+import Input from "../../components/Input";
+
+import "./Register.css";
 
 const Register = () => {
   const [email, setEmail] = useState("");

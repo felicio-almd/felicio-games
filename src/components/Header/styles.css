@@ -47,6 +47,12 @@
   gap: 1rem;
 }
 
+.header__actions__name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .games__genre {
   order: 4;
   display: flex;

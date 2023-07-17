@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import "./styles.css";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import { FirestoreActions } from "../../context/FirestoreContext";
 import { UserAuth } from "../../context/AuthContext";
-import { Link } from "react-router-dom";
+
+import "./styles.css";
 
 function Card({ game }) {
   const {
@@ -61,6 +63,7 @@ function Card({ game }) {
     } catch (error) {
       console.log(error);
     }
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -134,7 +137,7 @@ function Card({ game }) {
                           star <= stars ? "on" : "off"
                         } star-rating__button__star`}
                       >
-                        &#9733;
+                        &#9733;_
                       </span>
                     </button>
                   );

@@ -11,6 +11,10 @@
 
 .footer__links {
   padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
 }
 
 .footer__social {

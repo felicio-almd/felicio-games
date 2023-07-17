@@ -21,11 +21,20 @@
 
 .games__card__button {
   position: absolute;
-  padding: 2rem;
+  width: 350px;
+  font-size: 1.5rem;
+  padding: 1.5rem 2rem;
   background: none;
   cursor: pointer;
   text-decoration: none;
   outline: none;
+  display: flex;
+  justify-content: flex-end;
+  transition: transform 100ms ease;
+}
+
+.games__card__button:active {
+  transform: scale(1.1);
 }
 
 .games__card__infos {
@@ -65,23 +74,26 @@
 .games__card__rating {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0 1rem;
   text-decoration: none;
 }
 
 .star-rating {
   display: flex;
-  gap: 10px;
+
   color: white;
   font-size: 12px;
   align-items: center;
 }
 
 .star-rating__button {
+  font-size: 24px;
   background-color: transparent;
   border: none;
   outline: none;
   cursor: pointer;
+  transition: transform 100ms ease;
 }
 .on {
   color: yellow;
@@ -90,7 +102,13 @@
   color: #ccc;
 }
 
+.star-rating__button:active {
+  transform: scale(1.2);
+}
+
 .rate__remove {
+  /* display: flex;
+  align-items: center; */
   font-size: 12px;
   padding: 0 5px;
   width: auto;
@@ -98,4 +116,10 @@
   background: none;
   color: white;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+  .star-rating {
+    height: 16px;
+  }
 }
