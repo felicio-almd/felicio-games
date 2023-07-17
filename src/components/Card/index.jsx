@@ -137,7 +137,7 @@ function Card({ game }) {
                           star <= stars ? "on" : "off"
                         } star-rating__button__star`}
                       >
-                        &#9733;_
+                        &#9733;
                       </span>
                     </button>
                   );
