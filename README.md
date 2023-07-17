@@ -56,6 +56,10 @@ Prints do site :
 ![Alt text](image-2.png)
 ![Alt text](image-3.png)
 
+Site com mais features:
+![image](https://github.com/felicio-almd/felicio-games/assets/115444550/53c9bde7-bf06-495b-ad11-23d722508e25)
+
+
 ## :white_check_mark: Requirements
 
 Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed.
