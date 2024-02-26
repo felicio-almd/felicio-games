@@ -3,7 +3,7 @@
 
 &#xa0;
 
-<a href="https://felicio-games.vercel.app/">Site</a>
+<a target="_blank" href="https://felicio-games.vercel.app/">Site</a>
 
 </div>
 
