@@ -1,4 +1,4 @@
-import dbConfig from "../firebaseAppConfig";
+import dbConfig from "../firebase";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 const auth = getAuth(dbConfig);

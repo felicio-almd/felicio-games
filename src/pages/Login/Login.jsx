@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { signIn, signInWithGoogle } from "../../firebase/auth/signIn"; 
 import logo from "../../../public/logo-games-felicio.svg";
+import google_icon from "../../../public/google.png";
 import "./Login.css";
-import { useRouteError } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Input from "../../components/Input";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +15,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [resetPasswordRequested, setResetPasswordRequested] = useState(false);
 
-  const router = useRouteError();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ const Login = () => {
         return;
       }
 
-      router.push("/");
+      navigate("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       setError("Erro ao fazer login. Tente novamente.");
@@ -60,7 +62,7 @@ const Login = () => {
         return;
       }
 
-      router.push("/");
+      navigate("/");
     } catch (error) {
       console.error("Erro ao fazer login com o Google:", error);
       setError("Erro ao logar com o Google. Tente novamente.");
@@ -95,7 +97,7 @@ const Login = () => {
     <div className="auth__page">
       <img
         className="header__logo__image__login"
-        src={logo.src}
+        src={logo}
         alt="logo-gamesfelicio"
       />
       <div className="auth">
@@ -104,26 +106,23 @@ const Login = () => {
           {!resetPasswordRequested ? (
             <>
               <div className="auth__sign">
-                <div className="auth__input__container">
-                  <input
+                  <Input
                     type="email"
                     placeholder="E-mail"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="auth__input"
-                  />
-                  <i className="fa-regular fa-envelope"></i>
-                </div>
-                <div className="auth__input__container">
-                  <input
+                  >
+                    <i className="fa-regular fa-envelope "></i>
+                  </Input>
+                  <Input
                     type="password"
                     placeholder="Senha"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="auth__input"
-                  />
-                  <i className="fa-solid fa-key"></i>
-                </div>
+                  >
+                    <i className="fa-solid fa-key"></i>
+                  </Input>
               </div>
 
               {error && <small className="auth__error">{error}</small>}
@@ -145,7 +144,7 @@ const Login = () => {
                 <button
                   type="button"
                   className="auth__actions__link"
-                  onClick={() => router.push("/register")}
+                  onClick={() => navigate("/register")}
                 >
                   Registrar-se
                 </button>
@@ -156,6 +155,7 @@ const Login = () => {
                 onClick={handleGoogleLogin}
                 disabled={loading}
               >
+                <img src={google_icon} alt="Google Logo" height={40} />
                 Login com Google
               </button>
             </>

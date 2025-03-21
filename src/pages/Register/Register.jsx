@@ -5,25 +5,40 @@ import logo from "../../../public/logo-games-felicio.svg";
 import Input from "../../components/Input";
 
 import "./Register.css";
+import signUp from "../../firebase/auth/signUp";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
+      const { error } = await signUp(email, password);
       // await createUser(email, password);
-      navigate("/");
+      if (error) {
+        const firebaseError = error;
+          console.error("Erro ao fazer cadastro:", firebaseError);
+          setError("Erro ao fazer login. Tente novamente.");
+          setLoading(false);
+          return;
+        }
+      navigate("/login");
     } catch (error) {
-      console.log(error.message);
+      console.error("Erro ao fazer login:", error);
+      setError("Erro ao fazer login. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   };
-
-  const navigate = useNavigate();
 
   const handleGoBack = () => {
     navigate(-1);

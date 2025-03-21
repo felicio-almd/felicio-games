@@ -1,23 +1,18 @@
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "../../../public/logo-games-felicio.svg";
 import GenreItem from "../GenreItem";
-
 import "./styles.css";
+import { useAuthContext } from "../../context/AuthContext";
 
 function Header({ genres, onChange, selectedGenre, children }) {
+  const { userAuth, logout } = useAuthContext();
+  const navigate = useNavigate();
 
-  // const userIsLogged = () => {
-  //   return !!user;
-  // };
-
-  // const handleLogout = async () => {
-  //   try {
-  //     await logOut();
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
 
   return (
     <header className="header">
@@ -29,9 +24,9 @@ function Header({ genres, onChange, selectedGenre, children }) {
         />
         <h1 className="header__logo__title">Games Felicio </h1>
       </div>
-      {/* <div className="header__actions">
-        {userIsLogged() ? (
-          <p className="header__actions__name">{user.email}</p>
+      <div className="header__actions">
+        {userAuth ? (
+          <p className="header__actions__name">{userAuth.email}</p>
         ) : (
           <Link className="header__login__button" to="/login">
             <i className="fa-regular fa-circle-user"></i>
@@ -39,12 +34,12 @@ function Header({ genres, onChange, selectedGenre, children }) {
           </Link>
         )}
 
-        {userIsLogged() ? (
+        {userAuth && (
           <button onClick={handleLogout} className="header__logout__button">
             Sair
           </button>
-        ) : null}
-      </div> */}
+        )}
+      </div>
 
       {children}
 
