@@ -1,25 +1,23 @@
-import { Link } from "react-router-dom";
-import { UserAuth } from "../../context/AuthContext";
+// import { Link } from "react-router-dom";
 import logo from "../../../public/logo-games-felicio.svg";
 import GenreItem from "../GenreItem";
 
 import "./styles.css";
 
 function Header({ genres, onChange, selectedGenre, children }) {
-  const { user, logOut } = UserAuth();
 
-  const userIsLogged = () => {
-    return !!user;
-  };
+  // const userIsLogged = () => {
+  //   return !!user;
+  // };
 
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      window.location.reload();
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     await logOut();
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
 
   return (
     <header className="header">
@@ -31,7 +29,7 @@ function Header({ genres, onChange, selectedGenre, children }) {
         />
         <h1 className="header__logo__title">Games Felicio </h1>
       </div>
-      <div className="header__actions">
+      {/* <div className="header__actions">
         {userIsLogged() ? (
           <p className="header__actions__name">{user.email}</p>
         ) : (
@@ -46,7 +44,7 @@ function Header({ genres, onChange, selectedGenre, children }) {
             Sair
           </button>
         ) : null}
-      </div>
+      </div> */}
 
       {children}
 

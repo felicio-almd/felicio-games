@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { FirestoreActions } from "../../context/FirestoreContext";
 import axios from "axios";
 import Card from "../../components/Card";
 import Header from "../../components/Header";
@@ -20,10 +19,10 @@ function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const [limitGames, setLimitGames] = useState(LIMIT_GAMES);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const [showingFavorite, setShowingFavorites] = useState(false);
-  const [showingRated, setShowingRated] = useState(false);
+  // const [showingFavorite, setShowingFavorites] = useState(false);
+  // const [showingRated, setShowingRated] = useState(false);
 
-  const { favorites, ratings } = FirestoreActions();
+  // const { favorites, ratings } = FirestoreActions();
 
   function getGenres() {
     const uniqueGenres = [...new Set(games.map((game) => game.genre))];
@@ -100,16 +99,16 @@ function Home() {
     return filteredGames;
   };
 
-  const favoritedGames = filterGamesById(favorites, games);
+  // const favoritedGames = filterGamesById(favorites, games);
 
-  const handleFavorite = (event) => {
-    setShowingFavorites(event.target.checked);
-  };
+  // const handleFavorite = (event) => {
+  //   setShowingFavorites(event.target.checked);
+  // };
 
   // Função para atualizar de qual genero irá aparecer jogos na página
   const handleGenreChange = (event) => {
     const genre = event.target.value;
-    setShowingFavorites(false);
+    // setShowingFavorites(false);
     setSelectedGenre(genre);
     setLimitGames(LIMIT_GAMES);
     filterGames(genre, search);
@@ -174,15 +173,15 @@ function Home() {
           >
             <Search
               onChange={handleSearchChange}
-              onFavoriteChange={handleFavorite}
+              // onFavoriteChange={handleFavorite}
               // onRatedChange={handleRated}
-              favChecked={showingFavorite}
+              // favChecked={showingFavorite}
               // rateChecked={showingRated}
             />
           </Header>
         )}
 
-        {showingFavorite ? (
+        {/* {showingFavorite ? (
           <div className="games__container">
             <div className="games__main">
               {favoritedGames.map((game) => (
@@ -190,7 +189,7 @@ function Home() {
               ))}
             </div>
           </div>
-        ) : (
+        ) : ( */}
           <div className="games__container">
             {games.length < 1 ? (
               <div className="games__container__message">
@@ -212,7 +211,7 @@ function Home() {
               </div>
             )}
           </div>
-        )}
+        {/* )} */}
 
         {games.length < 1 ? null : (
           <>

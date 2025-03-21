@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserAuth } from "../../context/AuthContext";
 
 import logo from "../../../public/logo-games-felicio.svg";
 import Input from "../../components/Input";
@@ -12,13 +11,12 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { createUser } = UserAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await createUser(email, password);
+      // await createUser(email, password);
       navigate("/");
     } catch (error) {
       console.log(error.message);
