@@ -1,4 +1,3 @@
-// src/hooks/useRatings.js
 import { createContext, useContext, useEffect, useState } from "react";
 import {
   collection,
@@ -48,8 +47,8 @@ export const RatingsProvider = ({ children }) => {
         const ratingDocRef = doc(firestore, "users", userAuth.uid, "ratings", existingRating.id);
         await setDoc(ratingDocRef, { rating: newRating }, { merge: true });
         
-        setRatings(ratings.map(r => 
-          r.id === existingRating.id ? { ...r, rating: newRating } : r
+        setRatings(ratings.map(rate => 
+          rate.id === existingRating.id ? { ...rate, rating: newRating } : rate
         ));
       } else {
         const userRatingsRef = collection(firestore, "users", userAuth.uid, "ratings");

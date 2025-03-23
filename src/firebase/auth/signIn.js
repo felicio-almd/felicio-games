@@ -3,7 +3,6 @@ import { signInWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopu
 
 const auth = getAuth(firebaseConfig);
 
-// Exportação nomeada para login com email/senha
 export async function signIn(email, password) {
     let result = null,
         error = null;
@@ -15,7 +14,6 @@ export async function signIn(email, password) {
     return { result, error };
 }
 
-// Exportação nomeada para login com Google
 export async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
     let result = null,

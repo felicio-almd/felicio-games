@@ -9,15 +9,12 @@ import {
 import { useAuthContext } from "../context/AuthContext";
 import { firestore } from "../firebase/firebase";
 
-// const ratingsCollection = collection(db, "ratings");
-// const favoritesCollection = collection(db, "favorites");
 
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ( {children} ) => {
   const { userAuth } = useAuthContext();
   const [favorites, setFavorites] = useState([]);
-  // const [ratings, setRatings] = useState([]);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -80,7 +77,7 @@ export const FavoritesProvider = ( {children} ) => {
 export function useFavorites() {
   const context = useContext(FavoritesContext);
   if (!context) {
-    throw new Error("useFavorites precisa ser usado dentro do contexto FavoritesProvider");
+    throw new Error("useFavorites precisa ser usado dentro do FavoritesProvider");
   }
   return context;
 }

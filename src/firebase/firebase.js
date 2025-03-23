@@ -2,13 +2,13 @@ import { getApps, initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBjQitrLrRKHtpqRkZ1xtrf6tdaHTiQjkY",
-  authDomain: "games-felicio-auth.firebaseapp.com",
-  projectId: "games-felicio-auth",
-  storageBucket: "games-felicio-auth.appspot.com",
-  messagingSenderId: "667286034550",
-  appId: "1:667286034550:web:9f47fd70e7ff1f369f2757",
-  measurementId: "G-0ZC1NZHT1V",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];

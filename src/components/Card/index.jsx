@@ -21,11 +21,10 @@ function Card({ game }) {
     }
     e.preventDefault();
     
-    // Verifica se está tentando remover a avaliação
     if (currentRating === newRating) {
       const existingRating = ratings.find(r => r.gameId === game.id);
       if (existingRating) {
-        saveRating(game.id, newRating); // A função já trata a remoção
+        saveRating(game.id, newRating);
       }
     } else {
       saveRating(game.id, newRating);

@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, getAuth, signOut } from 'firebase/auth';
-import { AuthContext } from './AuthContext'; // Importação nomeada correta
+import { AuthContext } from './AuthContext';
 import Loader from '../components/Loader';
 import app from '../firebase/firebase';
 
 const auth = getAuth(app);
 
-export const AuthContextProvider = ({ children }) => { // Adicione chaves ao children
+export const AuthContextProvider = ({ children }) => { 
     const [userAuth, setUserAuth] = useState(null);
     const [loading, setLoading] = useState(true);
 
