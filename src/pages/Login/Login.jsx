@@ -95,6 +95,9 @@ const Login = () => {
 
   return (
     <div className="auth__page">
+    <span>
+      <a href="/" className="back__button">Voltar a Home</a>
+    </span>
       <img
         className="header__logo__image__login"
         src={logo}

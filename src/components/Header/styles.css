@@ -57,15 +57,43 @@
   order: 4;
   display: flex;
   justify-content: flex-start;
-  width: 100%;
+  max-width: 100%;
   color: var(--font);
-
   overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--font);
+    border-radius: 3px;
+
+    &:hover {
+      background: #888;
+    }
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--font) rgba(0, 0, 0, 0.1);
 }
 
-.games__genre::-webkit-scrollbar {
-  height: 0;
-  background-color: transparent;
+.games__genre:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, var(--background-color) 100%);
+  pointer-events: none;
 }
 
 .header__login__button {
@@ -79,9 +107,11 @@
   text-decoration: none;
   padding: 0 1rem;
 }
+
 .header__login__button:hover {
   transform: scale(1.1);
 }
+
 .header__logout__button {
   background: none;
   color: var(--font);
@@ -90,6 +120,7 @@
   font-size: 1rem;
   padding: 0 1rem;
 }
+
 .header__logout__button:hover {
   transform: scale(1.1);
 }
@@ -98,6 +129,7 @@
   .header__actions {
     width: auto;
   }
+
   .header__logo__title {
     display: flex;
   }

@@ -11,6 +11,17 @@
   transition: transform 200ms ease-in-out;
 }
 
+.games__card__link {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-decoration: none;
+  transition: transform 200ms ease-in-out;
+}
+
 .games__card:hover {
   transform: scale(1.05);
 }
@@ -19,14 +30,15 @@
   width: 100%;
 }
 
+.buttons__rate {
+  display: flex;
+}
+
 .favorite__button {
-  position: absolute;
-  width: 350px;
   font-size: 1.5rem;
-  padding: 1.5rem 2rem;
+  padding: 0 1rem;
   cursor: pointer;
   display: flex;
-  justify-content: flex-end;
   border-radius: 1rem;
   color: white;
   background: transparent;
@@ -34,9 +46,53 @@
   transition: color 200ms ease, transform 150ms ease;
 }
 
+.favorite__button {
+  transition: color 0.2s;
+}
+
 .favorite__button.favorited {
-  color: red;
-  animation: heartbeat 0.5s ease-in-out;
+  color: #ff0000;
+}
+
+.favorite__button:hover {
+  color: #ff0000;
+}
+
+.star__rating {
+  display: flex;
+  gap: 2px;
+  margin-right: 10px;
+}
+
+/* Estrelas */
+.star__button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #ffffff;
+  transition: color 0.2s;
+  font-size: 1.3rem;
+}
+
+.star__button.active .iconify {
+  color: #ffd700 !important;
+}
+
+.star__button:hover .iconify {
+  color: #ffd700;
+}
+
+.iconify {
+  color: inherit;
+}
+
+.star__button .iconify[icon*="star-rounded"] {
+  color: #ffd700;
+}
+
+.star__button:not(.active) .iconify {
+  color: #ffffff;
 }
 
 @keyframes heartbeat {
@@ -74,6 +130,8 @@
   color: var(--font);
   padding: 0 1rem;
   font-size: 22px;
+  display: flex;
+  align-items: center;
 }
 
 .games__sub__infos {
