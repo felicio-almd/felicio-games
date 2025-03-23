@@ -7,6 +7,7 @@ import Search from "../../components/Search";
 import "./Home.css";
 import { useFavorites } from "../../hooks/useFavorites";
 import { useAuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LIMIT_GAMES = 12;
 
@@ -24,6 +25,7 @@ function Home() {
 
   const { userAuth } = useAuthContext();
   const { favorites } = useFavorites();
+  const navigate = useNavigate();
 
   const getGenres = () => {
     const uniqueGenres = [...new Set(games.map((game) => game.genre))];
@@ -94,6 +96,9 @@ function Home() {
   };
 
   const handleFavoriteToggle = (event) => {
+    if(!userAuth){
+      navigate("/login")
+    }
     setShowingFavorite(event.target.checked);
     setLimitGames(LIMIT_GAMES);
   };

@@ -1,14 +1,22 @@
 import { useFavorites } from "../../hooks/useFavorites";
 import { Icon } from "@iconify/react";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 
 function Card({ game }) {
   const { favorites, addFavorite, deleteFavorite } = useFavorites();
+  const { userAuth } = useAuthContext();
   
   // Verifica se o jogo está nos favoritos
   const isFavorite = favorites.some(fav => fav.gameId === game.id);
+  const navigate = useNavigate();
+
 
   const handleFavoriteClick = (e) => {
+    if (!userAuth) {
+      navigate("/login");
+    }
     e.preventDefault();
     if (isFavorite) {
       const favoriteToDelete = favorites.find(fav => fav.gameId === game.id);
