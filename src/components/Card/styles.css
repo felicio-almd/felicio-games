@@ -19,22 +19,46 @@
   width: 100%;
 }
 
-.games__card__button {
+.favorite__button {
   position: absolute;
   width: 350px;
   font-size: 1.5rem;
   padding: 1.5rem 2rem;
-  background: none;
   cursor: pointer;
-  text-decoration: none;
-  outline: none;
   display: flex;
   justify-content: flex-end;
-  transition: transform 100ms ease;
+  border-radius: 1rem;
+  color: white;
+  background: transparent;
+  border: none;
+  transition: color 200ms ease, transform 150ms ease;
 }
 
-.games__card__button:active {
-  transform: scale(1.1);
+.favorite__button.favorited {
+  color: red;
+  animation: heartbeat 0.5s ease-in-out;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  75% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .games__card__infos {
@@ -95,9 +119,11 @@
   cursor: pointer;
   transition: transform 100ms ease;
 }
+
 .on {
   color: yellow;
 }
+
 .off {
   color: #ccc;
 }

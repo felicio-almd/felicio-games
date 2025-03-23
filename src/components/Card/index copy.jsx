@@ -1,20 +1,20 @@
 import { useFavorites } from "../../hooks/useFavorites";
-import { Icon } from "@iconify/react";
 import "./styles.css";
 
 function Card({ game }) {
   const { favorites, addFavorite, deleteFavorite } = useFavorites();
   
   // Verifica se o jogo está nos favoritos
-  const isFavorite = favorites.some(fav => fav.gameId === game.id);
+  const isFavorite = favorites.some(fav => fav.id === game.id);
 
   const handleFavoriteClick = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Evita que o link seja acionado
     if (isFavorite) {
-      const favoriteToDelete = favorites.find(fav => fav.gameId === game.id);
+      // Encontra o favorito correspondente
+      const favoriteToDelete = favorites.find(fav => fav.id === game.id);
       deleteFavorite(favoriteToDelete.id);
     } else {
-      addFavorite(game.id);
+      addFavorite(game);
     }
   };
 
@@ -36,13 +36,19 @@ function Card({ game }) {
       {/* Botão da estrela */}
       <button 
         onClick={handleFavoriteClick}
-        className={`favorite__button ${isFavorite ? "favorited" : ""}`}
+        className="favorite-button"
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          background: 'none',
+          border: 'none',
+          fontSize: '24px',
+          cursor: 'pointer',
+          color: isFavorite ? 'gold' : 'gray'
+        }}
       >
-        {isFavorite ? ( 
-          <Icon icon="material-symbols:favorite-rounded"></Icon>
-          ) : (  
-          <Icon icon="material-symbols:favorite-outline-rounded"></Icon> 
-        )}
+        {isFavorite ? '★' : '☆'}
       </button>
     </div>
   );

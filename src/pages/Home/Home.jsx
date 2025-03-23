@@ -4,8 +4,9 @@ import Card from "../../components/Card";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import Search from "../../components/Search";
-
 import "./Home.css";
+import { useFavorites } from "../../hooks/useFavorites";
+import { useAuthContext } from "../../context/AuthContext";
 
 const LIMIT_GAMES = 12;
 
@@ -19,17 +20,17 @@ function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const [limitGames, setLimitGames] = useState(LIMIT_GAMES);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  // const [showingFavorite, setShowingFavorites] = useState(false);
-  // const [showingRated, setShowingRated] = useState(false);
+  const [showingFavorite, setShowingFavorite] = useState(false);
 
-  // const { favorites, ratings } = FirestoreActions();
+  const { userAuth } = useAuthContext();
+  const { favorites } = useFavorites();
 
-  function getGenres() {
+  const getGenres = () => {
     const uniqueGenres = [...new Set(games.map((game) => game.genre))];
     setGenres(["Todos", ...uniqueGenres]);
-  }
+  };
 
-  async function getGames() {
+  const getGames = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_API_URL, {
         headers: {
@@ -39,191 +40,146 @@ function Home() {
       });
       setGames(response.data);
     } catch (error) {
-      if (error.response) {
-        const status = error.response.status;
-        if (
-          status == 500 ||
-          status == 502 ||
-          status == 503 ||
-          status == 504 ||
-          status == 507 ||
-          status == 508 ||
-          status == 509
-        ) {
-          setIsError(true);
-          setErrorMessage(
-            "O servidor falhou em responder, tente recarregar a página"
-          );
-        }
-      } else if (error.code === "ECONNABORTED") {
-        setIsError(true);
-        setErrorMessage("O servidor demorou para responder, tente mais tarde");
-      } else {
-        setIsError(true);
-        setErrorMessage(
-          "O servidor não conseguirá responder por agora, tente voltar novamente mais tarde"
-        );
-      }
+      handleApiError(error);
     }
-  }
+  };
 
-  // Essa constante é feita para que quando esteja selecionado um genero especifico e a busca seja utilizada, só aparece jogos que estão no genero selecionado.
-  const filterGames = (genre, search, favorites, userIsLogged) => {
-    let filtered;
-    if (
-      genre === "Todos" &&
-      search === "" &&
-      (!userIsLogged || favorites.length === 0)
-    ) {
-      filtered = games;
+  const handleApiError = (error) => {
+    setIsError(true);
+    if (error.response) {
+      const status = error.response.status;
+      if ([500, 502, 503, 504, 507, 508, 509].includes(status)) {
+        setErrorMessage("O servidor falhou em responder, tente recarregar a página");
+      }
+    } else if (error.code === "ECONNABORTED") {
+      setErrorMessage("O servidor demorou para responder, tente mais tarde");
     } else {
-      filtered = games.filter((game) => {
-        const matchesGenre = genre === "Todos" || game.genre === genre;
-        const matchesSearchTerm =
-          search === "" ||
-          game.title.toLowerCase().includes(search.toLowerCase());
-        const isFavorited = userIsLogged && favorites.includes(game.id);
-        return (
-          matchesGenre && matchesSearchTerm && (!userIsLogged || isFavorited)
-        );
-      });
+      setErrorMessage("O servidor não conseguirá responder por agora, tente novamente mais tarde");
     }
+  };
+
+  const filterGames = () => {
+    let filtered = games;
+
+    // Filtro por gênero
+    if (selectedGenre !== "Todos") {
+      filtered = filtered.filter((game) => game.genre === selectedGenre);
+    }
+
+    // Filtro por busca
+    if (search) {
+      const searchTerm = search.toLowerCase();
+      filtered = filtered.filter((game) =>
+        game.title.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    // Filtro por favoritos
+    if (showingFavorite && userAuth) {
+      const favoriteIds = favorites.map((fav) => fav.gameId);
+      filtered = filtered.filter((game) => favoriteIds.includes(game.id));
+    }
+
     setFilteredGames(filtered);
   };
 
-  const filterGamesById = (ids, games) => {
-    const filteredGames = games.filter((game) => {
-      return ids.includes(game.id);
-    });
-
-    return filteredGames;
-  };
-
-  // const favoritedGames = filterGamesById(favorites, games);
-
-  // const handleFavorite = (event) => {
-  //   setShowingFavorites(event.target.checked);
-  // };
-
-  // Função para atualizar de qual genero irá aparecer jogos na página
   const handleGenreChange = (event) => {
-    const genre = event.target.value;
-    // setShowingFavorites(false);
-    setSelectedGenre(genre);
+    setSelectedGenre(event.target.value);
     setLimitGames(LIMIT_GAMES);
-    filterGames(genre, search);
   };
 
   const handleSearchChange = (event) => {
-    const searchTerm = event.target.value;
-    setSearch(searchTerm);
+    setSearch(event.target.value);
     setLimitGames(LIMIT_GAMES);
-    filterGames(selectedGenre, searchTerm);
   };
 
-  function scrollTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
+  const handleFavoriteToggle = (event) => {
+    setShowingFavorite(event.target.checked);
+    setLimitGames(LIMIT_GAMES);
+  };
 
-  function handleScroll() {
+  const handleScroll = () => {
     setShowScrollButton(window.scrollY > 0);
-  }
+  };
 
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // effects
   useEffect(() => {
     getGames();
   }, []);
 
   useEffect(() => {
-    filterGames(selectedGenre, search);
-  }, [games, selectedGenre, search]);
+    filterGames();
+  }, [games, selectedGenre, search, showingFavorite, favorites]);
 
   useEffect(() => {
     getGenres();
   }, [games]);
 
   useEffect(() => {
-    function bottomPageVerify() {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        setLimitGames((limitGames) => limitGames + 12);
-      }
-    }
-
-    function scrollHandler() {
+    let timeoutId;
+    
+    const scrollHandler = () => {
       handleScroll();
-      bottomPageVerify();
-    }
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+          setLimitGames((prev) => prev + 12);
+        }
+      }, 100);
+    };
 
     window.addEventListener("scroll", scrollHandler);
-    return () => {
-      window.removeEventListener("scroll", scrollHandler);
-    };
+    return () => window.removeEventListener("scroll", scrollHandler);
   }, []);
 
   return (
-    <>
-      <div className="body">
-        {games.length < 1 ? null : (
-          <Header
-            genres={genres}
-            onChange={handleGenreChange}
-            selectedGenre={selectedGenre}
-          >
-            <Search
-              onChange={handleSearchChange}
-              // onFavoriteChange={handleFavorite}
-              // onRatedChange={handleRated}
-              // favChecked={showingFavorite}
-              // rateChecked={showingRated}
-            />
-          </Header>
-        )}
+    <div className="body">
+      {games.length > 0 && (
+        <Header
+          genres={genres}
+          onChange={handleGenreChange}
+          selectedGenre={selectedGenre}
+        >
+          <Search
+            onChange={handleSearchChange}
+            onFavoriteChange={handleFavoriteToggle}
+            favChecked={showingFavorite}
+          />
+        </Header>
+      )}
 
-        {/* {showingFavorite ? (
-          <div className="games__container">
-            <div className="games__main">
-              {favoritedGames.map((game) => (
-                <Card key={game.id} game={game} />
-              ))}
-            </div>
-          </div>
-        ) : ( */}
-          <div className="games__container">
-            {games.length < 1 ? (
-              <div className="games__container__message">
-                {isError ? (
-                  <p className="error-message"> {errorMessage} </p>
-                ) : (
-                  <Loader />
-                )}
-              </div>
+      <div className="games__container">
+        {games.length < 1 ? (
+          <div className="games__container__message">
+          {isError ? (
+            <p className="error-message"> {errorMessage} </p>
+          ) : (
+            <Loader />
+          )}
+        </div>
+        ) : (
+          <div className="games__main">
+            {filteredGames.length < 1 ? (
+              <div className="error-message">Nenhum Jogo Encontrado</div>
             ) : (
-              <div className="games__main">
-                {filteredGames.length < 1 ? (
-                  <div className="error-message">Nenhum Jogo Encontrado</div>
-                ) : (
-                  filteredGames
-                    .slice(0, limitGames)
-                    .map((game) => <Card key={game.id} game={game} />)
-                )}
-              </div>
+              filteredGames
+                .slice(0, limitGames)
+                .map((game) => <Card key={game.id} game={game} />)
             )}
           </div>
-        {/* )} */}
-
-        {games.length < 1 ? null : (
-          <>
-            {showScrollButton && (
-              <button className="scroll__top__button" onClick={scrollTop}>
-                <i className="fa-solid fa-arrow-up"></i>
-              </button>
-            )}
-          </>
         )}
       </div>
-    </>
+
+      {showScrollButton && (
+        <button className="scroll__top__button" onClick={scrollTop}>
+          <i className="fa-solid fa-arrow-up"></i>
+        </button>
+      )}
+    </div>
   );
 }
 

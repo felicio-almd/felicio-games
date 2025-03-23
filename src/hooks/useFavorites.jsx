@@ -35,22 +35,26 @@ export const FavoritesProvider = ( {children} ) => {
     fetchFavorites();
   }, [userAuth]);
 
-  async function addFavorite(favoriteInput) {
+  async function addFavorite(gameId) {
     if (!userAuth) return;
+
+    const exists = favorites.some(fav => fav.gameId === gameId);
+    if (exists) return;
+
     try {
       const userFavoritesRef = collection(firestore, "users", userAuth.uid, "favorites");
       const docRef = await addDoc(userFavoritesRef, {
-        ...favoriteInput,
-        createdAt: new Date().toISOString(),
+        gameId, 
+        createdAt: new Date().toISOString(), 
       });
       const newFavorite = {
-        id: docRef.id,
-        ...favoriteInput,
-        createdAt: new Date().toISOString(),
+        id: docRef.id, 
+        gameId,
+        createdAt: new Date().toISOString(), 
       };
       setFavorites([...favorites, newFavorite]);
     } catch (error) {
-      console.error("Error ao adicionar aos favoritos:", error);
+      console.error("Erro ao adicionar aos favoritos:", error);
     }
   }
 
