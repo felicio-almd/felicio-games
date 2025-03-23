@@ -1,157 +1,100 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import { FirestoreActions } from "../../context/FirestoreContext";
-import { UserAuth } from "../../context/AuthContext";
-
+import { useFavorites } from "../../hooks/useFavorites";
+import { Icon } from "@iconify/react";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
+import { useRatings } from "../../hooks/useRatings";
 
 function Card({ game }) {
-  const {
-    addFavorite,
-    removeFavorite,
-    favorites,
-    ratings,
-    removeRating,
-    addRating,
-  } = FirestoreActions();
-  const { user } = UserAuth();
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [stars, setStars] = useState(0);
+  const { favorites, addFavorite, deleteFavorite } = useFavorites();
+  const { ratings, saveRating } = useRatings();
+  const { userAuth } = useAuthContext();
+  
+  const isFavorite = favorites.some(fav => fav.gameId === game.id);
+  const currentRating = ratings.find(r => r.gameId === game.id)?.rating || 0;
+  const navigate = useNavigate();
 
-  const userIsLogged = () => {
-    return !!user;
-  };
-
-  const verifyGameIsInFavorite = () => {
-    return favorites.includes(game.id);
-  };
-
-  const handleRate = async (ratingValue) => {
-    try {
-      await addRating(game.id.toString(), ratingValue);
-    } catch (error) {
-      console.log(error);
+  const handleRatingClick = (e, newRating) => {
+    if (!userAuth) {
+      navigate("/login");
+      return;
     }
-  };
-
-  const handleSetStar = (selectedRating, event) => {
-    event.preventDefault();
-    setStars(selectedRating);
-    handleRate(selectedRating);
-  };
-
-  const handleRemoveRate = async (event) => {
-    event.preventDefault();
-    try {
-      await removeRating(game.id.toString());
-      setStars(0);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleFav = async (event) => {
-    event.preventDefault();
-    try {
-      if (isFavorite) {
-        await removeFavorite(game.id.toString());
-      } else {
-        await addFavorite(game.id.toString());
+    e.preventDefault();
+    
+    if (currentRating === newRating) {
+      const existingRating = ratings.find(r => r.gameId === game.id);
+      if (existingRating) {
+        saveRating(game.id, newRating);
       }
-      setIsFavorite(!isFavorite);
-    } catch (error) {
-      console.log(error);
+    } else {
+      saveRating(game.id, newRating);
     }
-    window.location.reload();
   };
 
-  useEffect(() => {
-    setIsFavorite(verifyGameIsInFavorite());
-    const verifyRateCount = async () => {
-      if (userIsLogged) {
-        const found = await ratings.find(
-          (element) => element.id === game.id.toString()
-        );
-        if (found) {
-          setStars(found.value);
-        } else {
-          setStars(0);
-        }
-      }
-    };
-    verifyRateCount();
-  }, []);
+  const handleFavoriteClick = (e) => {
+    if (!userAuth) {
+      navigate("/login");
+    }
+    e.preventDefault();
+    if (isFavorite) {
+      const favoriteToDelete = favorites.find(fav => fav.gameId === game.id);
+      deleteFavorite(favoriteToDelete.id);
+    } else {
+      addFavorite(game.id);
+    }
+  };
 
   return (
     <div className="games__card">
-      <a href={game.game_url} target="_blank" className="games__card">
-        <img className="games__card__image" src={game.thumbnail} alt="thumb" />
-        {userIsLogged() ? (
-          <button onClick={handleFav} className="games__card__button">
-            {isFavorite ? "❤️ " : "🤍 "}
-          </button>
-        ) : (
-          <Link to="/login" className="games__card__button">
-            {isFavorite ? "❤️ " : "🤍 "}
-          </Link>
-        )}
+      <div className="games__card">
+        <a href={game.game_url} target="_blank" className="games__card__link" rel="noreferrer">
+          <img className="games__card__image" src={game.thumbnail} alt="thumb" />
+        </a>
 
         <div className="games__card__infos">
-          <strong className="games__card__title">{game.title}</strong>
-          {userIsLogged() ? (
-            <div className="games__card__rating">
-              <div className="star-rating">
-                {[1, 2, 3, 4].map((star) => {
-                  return (
-                    <button
-                      key={star}
-                      className="star-rating__button"
-                      onClick={(event) => {
-                        handleSetStar(star, event);
-                      }}
-                    >
-                      <span
-                        className={`${
-                          star <= stars ? "on" : "off"
-                        } star-rating__button__star`}
-                      >
-                        &#9733;
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              <button className="rate__remove" onClick={handleRemoveRate}>
-                Remover estrelas
-              </button>
-            </div>
-          ) : (
-            <Link to="/login" className="games__card__rating">
-              <div className="star-rating">
-                {[1, 2, 3, 4].map((star) => {
-                  return (
-                    <button key={star} className="star-rating__button">
-                      <span
-                        className={`${
-                          star <= stars ? "on" : "off"
-                        } star-rating__button__star`}
-                      >
-                        &#9733;
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </Link>
-          )}
+        <a href={game.game_url} target="_blank" className="games__card__link" rel="noreferrer">
+          <strong className="games__card__title">
+            {game.title}
+          </strong>
+          </a>
 
+          <div className="buttons__rate">
+            <button 
+              onClick={handleFavoriteClick}
+              className={`favorite__button ${isFavorite ? "favorited" : ""}`}
+              >
+              {isFavorite ? ( 
+                <Icon icon="material-symbols:favorite-rounded"></Icon>
+              ) : (  
+                <Icon icon="material-symbols:favorite-outline-rounded"></Icon> 
+              )}
+            </button>
+              <div className="star__rating">
+              {[1, 2, 3, 4].map((star) => (
+                <button
+                  key={star}
+                  onClick={(e) => handleRatingClick(e, star)}
+                  className={`star__button ${currentRating >= star ? 'active' : ''}`}
+                >
+                  <Icon
+                    icon={
+                      currentRating >= star
+                        ? "material-symbols:star-rounded"
+                        : "material-symbols:star-outline-rounded"
+                    }
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+            
           <div className="games__sub__infos">
             <small className="games__card__genre">{game.genre}</small>
             <small className="games__card__dev">{game.developer}</small>
           </div>
         </div>
-      </a>
+      </div>
+      
     </div>
   );
 }

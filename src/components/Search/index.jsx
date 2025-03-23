@@ -1,14 +1,6 @@
 import "./styles.css";
 
-// Componente de busca de jogos que muda ao digitar. Tem o header como component parent
-
-function Search({
-  onChange,
-  onFavoriteChange,
-  favChecked,
-  onRatedChange,
-  rateChecked,
-}) {
+function Search({ onChange, onFavoriteChange, favChecked }) {
   return (
     <div className="header__filter">
       <input
@@ -17,7 +9,7 @@ function Search({
         onChange={onChange}
         placeholder="Digite aqui seu jogo..."
       />
-
+      
       <label className="header__filter__favorites">
         <input
           className="fav__check"

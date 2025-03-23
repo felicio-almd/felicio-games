@@ -1,165 +1,174 @@
-import React, { useEffect } from "react";
+"use client";
+
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { UserAuth } from "../../context/AuthContext";
-
-import Input from "../../components/Input";
+import { signIn, signInWithGoogle } from "../../firebase/auth/signIn"; 
 import logo from "../../../public/logo-games-felicio.svg";
-
+import google_icon from "../../../public/google.png";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
+import Input from "../../components/Input";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [rememberUser, setRememberUser] = useState(() => {
-    const freshRememberUser = localStorage.getItem("save-user");
-    return freshRememberUser ? freshRememberUser === "true" : false;
-  });
+  const [loading, setLoading] = useState(false);
   const [resetPasswordRequested, setResetPasswordRequested] = useState(false);
 
   const navigate = useNavigate();
 
-  const { signIn, recovery } = UserAuth();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
-      await signIn(email, password);
-      localStorage.setItem("user-email", email);
-      localStorage.setItem("user-password", password);
-      navigate("/");
-      window.location.reload();
-    } catch (error) {
-      console.log(error.message);
-      if (error.message.includes("auth/user-not-found")) {
-        setError("Usuário não encontrado!");
-      } else if (error.message.includes("auth/wrong-password")) {
-        setError("Senha Incorreta!");
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        const firebaseError = error;
+        console.error("Erro ao fazer login:", firebaseError);
+        if (firebaseError.code === "auth/user-not-found") {
+          setError("Usuário não encontrado!");
+        } else if (firebaseError.code === "auth/wrong-password") {
+          setError("Senha incorreta!");
+        } else {
+          setError("Erro ao fazer login. Tente novamente.");
+        }
+        setLoading(false);
+        return;
       }
+
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      setError("Erro ao fazer login. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleRemember = (event) => {
-    setRememberUser(event.target.checked);
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const { error } = await signInWithGoogle();
+
+      if (error) {
+        console.error("Erro ao fazer login com o Google:", error);
+        setError("Erro ao logar com o Google. Tente novamente.");
+        setLoading(false);
+        return;
+      }
+
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao fazer login com o Google:", error);
+      setError("Erro ao logar com o Google. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleResetPassword = () => {
-    setResetPasswordRequested(true);
+  const handleResetPassword = async () => {
+    if (!email.trim()) {
+      setError("Por favor, insira seu e-mail para recuperar a senha.");
+      return;
+    }
 
-    recovery(email)
-      .then(() => {
-        console.log("Email de recuperação de senha enviado");
-      })
-      .catch((error) => {
-        console.log(error);
-        setError("Ocorreu um erro ao solicitar a recuperação de senha");
-      });
+    setLoading(true);
+    setError("");
+
+    try {
+      setResetPasswordRequested(true);
+    } catch (error) {
+      console.error("Erro ao solicitar recuperação de senha:", error);
+      setError("Erro ao solicitar recuperação de senha. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isEmailEmpty = email.trim() === "";
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
-  useEffect(() => {
-    if (rememberUser) {
-      const freshUserEmail = localStorage.getItem("user-email");
-      const freshUserPassword = localStorage.getItem("user-password");
-      if (freshUserEmail && freshUserPassword) {
-        setEmail(freshUserEmail.toString());
-        setPassword(freshUserPassword.toString());
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("save-user", rememberUser.toString());
-  }, [rememberUser]);
-
   return (
     <div className="auth__page">
+    <span>
+      <a href="/" className="back__button">Voltar a Home</a>
+    </span>
       <img
         className="header__logo__image__login"
         src={logo}
         alt="logo-gamesfelicio"
       />
       <div className="auth">
-        <div className="back">
-          <button className="back__button" onClick={handleGoBack}>
-            <i className="fa-solid fa-angle-left"></i>
-            Voltar
-          </button>
-        </div>
-
         <form onSubmit={handleSubmit} className="auth__form">
           <h1 className="auth__title">Login</h1>
           {!resetPasswordRequested ? (
             <>
               <div className="auth__sign">
-                <Input
-                  placeholder="E-mail"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                >
-                  <i className="fa-regular fa-envelope "></i>
-                </Input>
-
-                <Input
-                  placeholder="Senha"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                >
-                  <i className="fa-solid fa-key"></i>
-                </Input>
-              </div>
-              <div className="auth__remember">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  id="remember"
-                  onChange={handleRemember}
-                  checked={rememberUser}
-                />
-                <label htmlFor="remember">Lembrar</label>
+                  <Input
+                    type="email"
+                    placeholder="E-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  >
+                    <i className="fa-regular fa-envelope "></i>
+                  </Input>
+                  <Input
+                    type="password"
+                    placeholder="Senha"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="auth__input"
+                  >
+                    <i className="fa-solid fa-key"></i>
+                  </Input>
               </div>
 
-              <>
-                {error ? <small className="auth__error">{error}</small> : null}
-              </>
+              {error && <small className="auth__error">{error}</small>}
 
-              <button className="auth__button" type="submit">
-                Entrar
+              <button className="auth__button" type="submit" disabled={loading}>
+                {loading ? "Carregando..." : "Entrar"}
               </button>
 
               <button
                 className="auth__forgot"
                 onClick={handleResetPassword}
-                disabled={isEmailEmpty || !isEmailValid}
+                disabled={isEmailEmpty || !isEmailValid || loading}
               >
                 Esqueceu sua senha?
               </button>
+
               <div className="auth__actions">
                 <p>Não tem conta?</p>
-
-                <Link to="/Register" className="auth__actions__link">
+                <button
+                  type="button"
+                  className="auth__actions__link"
+                  onClick={() => navigate("/register")}
+                >
                   Registrar-se
-                </Link>
+                </button>
               </div>
+
+              <button
+                className="auth__google"
+                onClick={handleGoogleLogin}
+                disabled={loading}
+              >
+                <img src={google_icon} alt="Google Logo" height={40} />
+                Login com Google
+              </button>
             </>
           ) : (
             <div className="auth__instructions">
-              <p className="auth__instructions">
-                Um email com instruções para redefinir sua senha foi enviado
-                para o seu endereço de email.
+              <p>
+                Um email com instruções para redefinir sua senha foi enviado para
+                o seu endereço de email.
               </p>
-
-              <p>Retorne a Home por favor.</p>
+              <p>Retorne à Home, por favor.</p>
             </div>
           )}
         </form>

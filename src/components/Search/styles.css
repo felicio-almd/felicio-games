@@ -36,7 +36,7 @@
   display: none;
 }
 
-.fav__check:checked + .fav__title {
+.fav__check:checked+.fav__title {
   font-weight: bold;
 }
 
@@ -56,8 +56,14 @@
   display: none;
 }
 
-.fav__check:checked + .fav__title {
+.fav__check:checked+.fav__title {
   font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+  .header__filter {
+    width: 100%;
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -65,6 +71,7 @@
     order: 2;
     min-width: 35%;
   }
+
   .header__search__box {
     width: 70%;
     order: 2;
