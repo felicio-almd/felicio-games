@@ -37,24 +37,24 @@ Site de uma Lista de jogos, fornecida por um API, realizado com HTML, CSS e Reac
 
 :heavy_check_mark: Feature 1: Projeto feito com react;\
 :heavy_check_mark: Feature 2: Responsividade para mobile e tablet;\
-:heavy_check_mark: Feature 3: Loader quando jogos não apresenta jogos;\
+:heavy_check_mark: Feature 3: Loader quando jogos não apresenta jogos e scroll infinito (com botao para o topo);\
 :heavy_check_mark: Feature 4: Apresenta mensagem visiveis ao usuario quando ocorre erro;\
-:heavy_check_mark: Feature 5: Campo para pesquisa de jogos por titulo;\
+:heavy_check_mark: Feature 5: Campo para pesquisa de jogos por titulo, visualização de jogos favoritados;\
 :heavy_check_mark: Feature 6: Labels com os generos de jogos disponiveis;\
-:heavy_check_mark: Feature 7: Deploy na vercel! 😃 ;
+:heavy_check_mark: Feature 7: Autenticação para poder adicionar aos favoritos seus jogos preferidos e poder avaliar jogos;\
+:heavy_check_mark: Feature 8: Deploy na vercel! 😃 ;
 
 ## :rocket: Technologies
 
 The following tools were used in this project:
 
+- [React](https://pt-br.reactjs.org/)
+- [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
 - [HTML5](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
 - [CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
-- [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
-- [React](https://pt-br.reactjs.org/)
 
 Prints do site :
 ![Alt text](image-2.png)
-![Alt text](image-3.png)
 
 Site com mais features:
 ![image](https://github.com/felicio-almd/felicio-games/assets/115444550/53c9bde7-bf06-495b-ad11-23d722508e25)
@@ -76,15 +76,13 @@ $ cd felicio-games
 # Install dependencies
 $ npm install
 
+# Atualize as variaveis de ambiente
+
 # Run the project
 $ npm run dev
 
 # The server will initialize in the <http://localhost:3000>
 ```
-
-<!-- ## :memo: License
-
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file. -->
 
 Made with :heart: by <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Felicio Almeida</a>
 
